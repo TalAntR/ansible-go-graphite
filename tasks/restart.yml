@@ -1,0 +1,6 @@
+---
+
+-  name: call restart handler
+   debug: msg="restart {{ carbonapi.service.daemon }} daemon"
+   changed_when: true
+   notify: restart carbonapi

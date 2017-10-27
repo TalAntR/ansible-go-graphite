@@ -1,0 +1,37 @@
+---
+
+  # To override collectd settings by user, just add a group_vars file
+  # with OS family name and put desired settings there
+- name: create OS-specific groups
+  group_by: key="{{ ansible_os_family | lower }}"
+  when: ansible_os_family is defined
+  tags: always
+
+- name: include OS-specific settings
+  include_vars: file="{{ item }}"
+                name="_os_"
+  with_first_found:
+    - "{{ ansible_os_family | lower }}.yml"
+  tags: always
+
+- include: prepare.yml
+  vars:
+    svc: "{{ _os_.graphite.service | combine(graphite[go_graphite.service], graphite.common, recursive=True) }}"
+  tags: prepare
+
+- include: install.yml
+  vars:
+    svc: "{{ _os_.graphite.service | combine(graphite[go_graphite.service], graphite.common, recursive=True) }}"
+  tags: install
+
+- include: configure.yml
+  vars:
+    svc: "{{ {} | combine(graphite[go_graphite.service], graphite.common, recursive=True) }}"
+  tags: configure
+
+- include: restart.yml
+  tags: [start, restart]
+
+# Verification tasks to make sure that the service is fine
+- include: verify.yml
+  tags: verify

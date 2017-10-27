@@ -1,0 +1,12 @@
+---
+
+- name: restart service
+  service:
+    name: "{{ graphite.common.daemon }}"
+    state: restarted
+
+- name: restart systemd-service
+  systemd:
+    name: "{{ graphite.common.daemon }}"
+    state: restarted
+    daemon-reload: yes

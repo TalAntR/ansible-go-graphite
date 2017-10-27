@@ -1,0 +1,17 @@
+---
+
+- name: add yum repositories
+  yum_repository:
+    name: "{{ item.key }}"
+    description: "{{ item.value.description }}"
+    file: "{{ item.key }}"
+    baseurl: "{{ item.value.url }}"
+    gpgkey: "{{ item.value['keys'] | join(' ') }}"
+    gpgcheck: "{{ item.value.gpgcheck | default('yes') }}"
+    enabled: "{{ item.value.enabled | default('yes') }}"
+    sslcacert: "{{ item.value.sslcacert }}"
+    sslverify: "{{ item.value.sslverify | default('yes') }}"
+    metadata_expire: "{{ item.value.metadata_expire | default('21600') }}"
+    repo_gpgcheck: "{{ item.value.repo_gpgcheck | default('no') }}"
+  with_dict: "{{ svc.providers.pkg.repositories | default({}) }}"
+  no_log: yes

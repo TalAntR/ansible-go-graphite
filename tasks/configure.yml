@@ -1,0 +1,10 @@
+---
+
+- name: deliver configuration
+  template:
+    src: config.yaml.j2
+    dest: "{{ svc.home }}/{{ svc.conf }}"
+    owner: "{{ svc.owner }}"
+    group: "{{ svc.owner }}"
+    mode: 0640
+  notify: restart service

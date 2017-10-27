@@ -1,0 +1,21 @@
+---
+
+- name: install packages
+  package:
+    name: "{{ svc.providers.pkg.delim.join([item, svc.version]) }}*"
+    update_cache: yes
+    state: present
+  with_items: "{{ svc.providers.pkg.packages | select | list }}"
+
+- name: create home directory
+  file:
+    path: "{{ svc.home }}"
+    owner: "{{ svc.owner }}"
+    group: "{{ svc.owner }}"
+    state: directory
+    mode: 0755
+
+- name: enable autostart on boot
+  service:
+    name: "{{ svc.daemon }}"
+    enabled: yes

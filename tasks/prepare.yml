@@ -1,0 +1,18 @@
+---
+
+#- debug:
+#    msg: "{{ svc }}"
+#
+#- debug:
+#    msg: "{{graphite.keys()}}"
+
+- name: prepare rhel
+  include: redhat/prepare.yml
+  when: (ansible_os_family | lower == "redhat")
+
+- name: install/upgrade prerequisites
+  package:
+    name: "{{ item }}"
+    state: present
+    update_cache: yes
+  with_items: "{{ svc.providers.pkg.prerequisites | default([]) }}"

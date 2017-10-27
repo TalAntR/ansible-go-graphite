@@ -1,0 +1,10 @@
+#jinja2: lstrip_blocks: True
+# Config file for collectd(1).
+#
+# Some plugins need additional configuration and are disabled by default.
+# Please read collectd.conf(5) for details.
+#
+# {{ ansible_managed }}
+#
+
+{{ graphite[go_graphite.service].options | to_nice_yaml }}

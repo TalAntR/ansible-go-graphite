@@ -1,0 +1,4 @@
+---
+
+- name: get service status
+  service: name={{ carbonapi.service.daemon }} state=running
